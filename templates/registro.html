@@ -1,0 +1,93 @@
+{% extends 'plantilla-base.html' %}
+{% block title %}Registro{% endblock %}
+{% block header %}Crear cuenta{% endblock %}
+{% block contenido %}
+
+<form method="POST" action="{{ url_for('registrar') }}" class="mx-auto">
+    <div class="row">
+        <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'error' else 'danger'}} alert-dismissible fade show"
+            role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        </div>
+
+
+
+
+
+
+
+
+<h6 class="text-center text-secondary mb-3">Es rápido y fácil</h6>
+        <div class="col-md-4 mx-auto">
+            <div class="row mb-3">
+                
+                <div class="col-6 mb-3">
+                    <label for="nombre" class="form-label">Nombre completo</label>
+                    <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Nombre(s)" required>
+                </div>
+
+                <div class="col-6 mb-3">
+                    <label for="email" class="form-label">Correo electronico</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico">
+                </div>
+            </div>
+            <div>
+                <div class="row mb-3">
+                    <div class="col-12 mb-3">
+                        <label for="dia" class="form-label">Fecha de nacimiento ?</label>
+                        <input type="date" class="form-control" id="dia" name="dia" placeholder="Día">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label for="pass" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="pass" name="pass" placeholder="Contraseña"required minlength ="8">
+                </div>
+                <div class="col-6">
+                    <label for="passConfirm" class="form-label">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" id="passConfirm" name="passConfirm" placeholder="Confirmar Contraseña" required minlength ="8">
+                </div>
+            </div>
+            <div class="mb-3">
+                <h6 class="text-secondary">Sexo</h6>
+                <div class="d-flex justify-content-between">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sexo" id="mujer" value="Mujer" required>
+                        <label class="form-check-label" for="mujer">
+                            Mujer
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sexo" id="hombre" value="Hombre" required>
+                        <label class="form-check-label" for="hombre">
+                            Hombre
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sexo" id="personalizado"
+                            value="Personalizado" required>
+                        <label class="form-check-label" for="personalizado">
+                            Otro
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+            <button class="btn btn-primary">registrarte</button>
+
+        </form>
+{% endblock %}
