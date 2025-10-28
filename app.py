@@ -1,17 +1,57 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-
-hola 
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 
 app = Flask(__name__)
-app.secret_key = '2423415414'  
+
+USUARIOS_REGISTRADOS = {
+    'admin@correo.com': {
+        'pasword': 'Admin123',
+        'nombre': 'Administrador',
+        'Fecha de Nacimiento': '1990-01-01'
+    }
+}
+
+app.secret_key = '12345678'
+
 
 @app.route('/')
 def inicio():
-    return redirect(url_for('index')) 
+    return redirect(url_for('index'))
+
 
 @app.route('/index')
 def index():
     return render_template('inicio.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '').strip()
+
+        if not email or not password:
+            flash('Por favor ingresa email y contraseña', 'error')
+            return redirect(url_for('login'))
+
+        if email in USUARIOS_REGISTRADOS:
+            usuario = USUARIOS_REGISTRADOS[email]
+            if usuario['pasword'] == password:
+                session['usuario_email'] = email
+                session['usuario'] = usuario['nombre']
+                session['logueado'] = True
+
+                flash(f'Bienvenido {usuario["nombre"]}!', 'success')
+                return redirect(url_for('index'))
+            else:
+                flash('Contraseña incorrecta', 'error')
+                return redirect(url_for('login'))
+        else:
+            flash('El usuario no existe', 'error')
+            return redirect(url_for('login'))
+
+        
+    return render_template('login.html')
+
 
 @app.route('/registro', methods=['GET', 'POST'])
 def registrar():
@@ -22,7 +62,6 @@ def registrar():
         confirmarcontraseña = request.form.get('passConfirm')  
         dia = request.form.get('dia')
 
-
         if contraseña != confirmarcontraseña:
             flash("Las contraseñas no coinciden.", "error")
             return redirect(url_for('registrar'))
@@ -32,21 +71,33 @@ def registrar():
 
     return render_template('registro.html')
 
+
 @app.route('/acerca')
 def acerca():
-    return render_template('Acerca-de.html')     
+    return render_template('Acerca-de.html')
+
 
 @app.route('/animales')
 def animales():
     return render_template('animales-exoticos.html')
 
+
 @app.route('/vehiculos')
 def vehiculos():
     return render_template('vehiculos.html')
 
+
 @app.route('/maravillas')
 def maravillas():
     return render_template('maravillas.html')
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash("Sesión cerrada correctamente.", "success")
+    return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

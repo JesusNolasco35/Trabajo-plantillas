@@ -25,17 +25,29 @@
                     <li class="nav-item"><a class="nav-link text-light" href="/vehiculos">Vehículos Antiguos</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="/maravillas">Las Maravillas del Mundo</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="/acerca">Acerca de...</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="/registro">Registro</a></li>
+                    {% if not session.get('logueado') %}
+                        
+                        <a class="nav-link  fw-semibold" href="/registro">Registro</a>
+                        <a class="nav-link fw-semibold" href="{{ url_for('login') }}">Iniciar Sesión</a>
+                        {% else %}
+                        
+                        <a class="nav-link text-danger fw-semibold" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+                        {% endif %}
+                        {%if session.get("logueado")%}
+        <span class="badge bg-success mb-3">Usuario: {{ session.get("usuario") }}</span>
+        {% endif %}
+
                 </ul>
             </div>
         </div>
     </nav>
 
+
     <header class="container text-center mt-4">
         <h1 class="fw-bold text-primary border-bottom pb-2">{% block header %}Desarrollo de Plantilla Base{% endblock %}</h1>
     </header>
 
-   
+
     <main class="container mt-4 mb-5 bg-white rounded shadow p-4">
         {% block contenido %}
         {% endblock %}
